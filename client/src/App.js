@@ -1,12 +1,15 @@
-import React from "react";
+import React, { useState } from "react";
 import "./App.css";
 import { withFormik, Form, Field } from "formik";
 import * as yup from "yup";
 import axios from "axios";
 
 const App = props => {
-  // console.log(props);
+  console.log(props);
+
+  const { users, setUsers } = useState([]);
   const { values, touched, errors } = props;
+
   return (
     <div>
       <div className="instruction">
@@ -40,6 +43,9 @@ const App = props => {
           />
         </label>
         <button type="submit">Submit</button>
+        {/* {users.map(user =>
+          <div>{JSON.stringify(user)}</div>
+        )} */}
       </Form>
     </div>
   );
@@ -59,12 +65,13 @@ const FormikForm = withFormik({
       .min(7, "Password must be at least 7 characters long")
       .required("password is required")
   }),
-  handleSubmit: (values, { resetForm }) => {
+  handleSubmit: (values, { resetForm, setStatus }) => {
     console.log("Request");
     axios
       .post("http://localhost:5000/api/register", values)
       .then(res => {
         console.log(res);
+        setStatus(res);
         resetForm();
       })
       .catch(error => {
