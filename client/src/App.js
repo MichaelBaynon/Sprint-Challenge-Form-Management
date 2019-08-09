@@ -14,7 +14,9 @@ const App = props => {
       console.log('status', status)
       setUsers([...users, status])
     }
-  }, [status])
+  }, [status]);
+
+
 
   console.log('user', users)
 
@@ -52,7 +54,7 @@ const App = props => {
         </label>
         <button type="submit">Submit</button>
         {users.length > 0 && users.map(user =>
-          <div key={user.id}>{JSON.stringify(user)}</div>
+          <div key={user.id}>{JSON.stringify(user.data.message)}</div>
         )}
       </Form>
     </div>
@@ -84,7 +86,8 @@ const FormikForm = withFormik({
       })
       .catch(error => {
         console.log(error);
-      });
+      })
+
   }
 })(App);
 
