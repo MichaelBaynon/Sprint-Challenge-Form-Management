@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./App.css";
 import { withFormik, Form, Field } from "formik";
 import * as yup from "yup";
@@ -7,8 +7,16 @@ import axios from "axios";
 const App = props => {
   console.log(props);
 
-  const { users, setUsers } = useState([]);
-  const { values, touched, errors } = props;
+  const [users, setUsers] = useState([]);
+  const { values, touched, errors, status } = props;
+  useEffect(() => {
+    if (status) {
+      console.log('status', status)
+      setUsers([...users, status])
+    }
+  }, [status])
+
+  console.log('user', users)
 
   return (
     <div>
@@ -43,9 +51,9 @@ const App = props => {
           />
         </label>
         <button type="submit">Submit</button>
-        {/* {users.map(user =>
-          <div>{JSON.stringify(user)}</div>
-        )} */}
+        {users.length > 0 && users.map(user =>
+          <div key={user.id}>{JSON.stringify(user)}</div>
+        )}
       </Form>
     </div>
   );
