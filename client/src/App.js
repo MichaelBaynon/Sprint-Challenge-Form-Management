@@ -6,9 +6,10 @@ import axios from "axios";
 
 const App = props => {
   console.log(props);
-
+  const [responseData, setResponseData] = useState([]);
   const [users, setUsers] = useState([]);
   const { values, touched, errors, status } = props;
+
   useEffect(() => {
     if (status) {
       console.log('status', status)
@@ -56,6 +57,8 @@ const App = props => {
         {users.length > 0 && users.map(user =>
           <div key={user.id}>{JSON.stringify(user.data.message)}</div>
         )}
+        <div>{setResponseData}</div>
+
       </Form>
     </div>
   );
@@ -75,7 +78,7 @@ const FormikForm = withFormik({
       .min(7, "Password must be at least 7 characters long")
       .required("password is required")
   }),
-  handleSubmit: (values, { resetForm, setStatus }) => {
+  handleSubmit: (values, { resetForm, setStatus, setResponseData }) => {
     console.log("Request");
     axios
       .post("http://localhost:5000/api/register", values)
@@ -87,7 +90,11 @@ const FormikForm = withFormik({
       .catch(error => {
         console.log(error);
       })
-
+    axios.get('http://localhost:5000/api/restricted/users ')
+      .then(response => {
+        setResponseData(response)
+        console.log("response DATA", response);
+      })
   }
 })(App);
 
